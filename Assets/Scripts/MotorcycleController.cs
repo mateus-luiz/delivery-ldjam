@@ -14,6 +14,9 @@ public class MotorcycleController : MonoBehaviour
     [SerializeField] private float maxVelocity;
     private float currentVelocity = 0f;
     
+    private bool isBreaking = false;
+    [SerializeField] private float brakeForce;
+
     void Awake()
     {
         actions = new MotorcycleActions();
@@ -36,7 +39,14 @@ public class MotorcycleController : MonoBehaviour
 
     void Update() 
     {
+        isBreaking = actions.MotorcycleInputs.Brake.IsPressed() ? true : false;
+
         if(currentVelocity > maxVelocity) currentVelocity = maxVelocity;
+        if(isBreaking && currentVelocity >= 0.1f)
+        {
+            currentVelocity -= brakeForce * Time.deltaTime;
+        }
+
         Vector2 inputs = actions.MotorcycleInputs.Direction.ReadValue<Vector2>();
 
         direction.x = inputs.x * maxVelocity;
