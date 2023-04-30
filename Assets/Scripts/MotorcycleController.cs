@@ -6,11 +6,16 @@ public class MotorcycleController : MonoBehaviour
 {
     private MotorcycleActions actions;
 
+    [Header("Components")]
     [SerializeField] private Rigidbody motorcycleRigidbody;
+    [SerializeField] private Camera cam;
+
+    [Header("Movement Settings")]
     private Vector3 direction;
     private float turnTime = 0.1f;
     private float smoothVelocity;
 
+    [Header("Velocity Settings")]
     [SerializeField] private float maxVelocity;
     private float currentVelocity = 0f;
     
@@ -55,7 +60,7 @@ public class MotorcycleController : MonoBehaviour
 
     void FixedUpdate() {
 
-        float directionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        float directionAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
         float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, directionAngle, ref smoothVelocity, turnTime);
         
         if(direction.magnitude >= 0.1f)

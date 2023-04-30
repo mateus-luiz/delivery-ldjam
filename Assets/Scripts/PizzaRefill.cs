@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class PizzaRefill : MonoBehaviour
 {
-    [SerializeField] private PizzaManager pizzaManager;
-
+    [Header("Pizza Settings")]
+    private PizzaManager pizzaManager;
     public int minPizza;
     public int maxPizza;
+
+    [Header("Timer Settings")]
+    private Timer timer;
 
     void Start()
     {
         pizzaManager = FindFirstObjectByType<PizzaManager>();
+        timer = FindFirstObjectByType<Timer>();
     }
 
     public void RefillPizza()
@@ -19,9 +23,10 @@ public class PizzaRefill : MonoBehaviour
         int amount = Random.Range(minPizza, maxPizza);
 
         pizzaManager.SetAmountPizza(amount);
-        pizzaManager.DisableAllRefillPoint();
-
         pizzaManager.SpawnDeliveryPoint();
+
+        timer.PauseTimer(false);
+        pizzaManager.DisableAllRefillPoint();
     }
 
     void OnTriggerEnter(Collider other)
