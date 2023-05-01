@@ -12,6 +12,9 @@ public class Timer : MonoBehaviour
     [SerializeField] private bool isPaused;
     [SerializeField] private float timerLimit;
     [SerializeField] private float starterTime;
+    private float minutes = 0f;
+    private float seconds = 0f;
+
     private float currentTime;
 
     [Header("Pizza Manager")]
@@ -30,8 +33,6 @@ public class Timer : MonoBehaviour
 
     void Update()
     {
-        currentTime = isPaused ? currentTime : currentTime -= Time.deltaTime;
-
         if(currentTime <= timerLimit)
         {
             isPaused = true;
@@ -39,11 +40,21 @@ public class Timer : MonoBehaviour
             currentTime = starterTime;
         }
 
-        timerText.text = currentTime.ToString("0.00");
+        currentTime = isPaused ? currentTime : currentTime -= Time.deltaTime;
+
+        minutes = Mathf.FloorToInt(currentTime / 60);
+        seconds = Mathf.FloorToInt(currentTime % 60);
+
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);;
     }
 
     public void PauseTimer(bool state)
     {
         isPaused = state;
+    }
+
+    public void AddTime(float time)
+    {
+        currentTime += time;
     }
 }

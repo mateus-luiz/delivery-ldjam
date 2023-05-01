@@ -12,11 +12,16 @@ public class DeliverPizza : MonoBehaviour
     [Header("Score Settings")]
     [SerializeField] private ScoreManager scoreManager;
 
+    [Header("AudioSource")]
+    private AudioSource audioSource;
+    public AudioClip audioClip;
+
     void Start() 
     {
         pizzaManager = FindFirstObjectByType<PizzaManager>();
         timer = FindFirstObjectByType<Timer>();
         scoreManager = FindFirstObjectByType<ScoreManager>();
+        audioSource = FindFirstObjectByType<AudioSource>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -30,10 +35,10 @@ public class DeliverPizza : MonoBehaviour
     public void Delivery()
     {
         int amountPizza = pizzaManager.GetAmountPizza();
-        if(amountPizza > 0)
+        pizzaManager.SetAmountPizza(--amountPizza);
+        
+        if(amountPizza >= 1)
         {
-            amountPizza--;
-            pizzaManager.SetAmountPizza(amountPizza);
             pizzaManager.SpawnDeliveryPoint();
         }
         
@@ -44,6 +49,9 @@ public class DeliverPizza : MonoBehaviour
         }
         
         scoreManager.IncreaseScore();
+        timer.AddTime(5f);
+        audioSource.PlayOneShot(audioClip);
+
         Destroy(this.gameObject);
     }
 }

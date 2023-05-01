@@ -7,7 +7,7 @@ using TMPro;
 public class PizzaManager : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-    
+
     [Header("Pizza Settings")]
     [SerializeField] private int pizzaAmount = 0;
 
@@ -18,17 +18,19 @@ public class PizzaManager : MonoBehaviour
 
     [Header("Pizza UI")]
     [SerializeField] private TextMeshProUGUI pizzaAmountText;
+    [SerializeField] private DeliveryDirection compass;
 
     void Start()
     {
         player = FindObjectOfType<MotorcycleController>().gameObject;
+        compass = FindFirstObjectByType<DeliveryDirection>();
     }
 
     void Update()
     {
         pizzaAmountText.text = pizzaAmount.ToString("00");
 
-        if(pizzaAmount == 0)
+        if (pizzaAmount == 0)
         {
             EnableAllRefillPoint();
         }
@@ -36,7 +38,7 @@ public class PizzaManager : MonoBehaviour
 
     public void SetAmountPizza(int amount)
     {
-        pizzaAmount = amount;    
+        pizzaAmount = amount;
     }
 
     public int GetAmountPizza()
@@ -44,8 +46,9 @@ public class PizzaManager : MonoBehaviour
         return pizzaAmount;
     }
 
-    public void DisableAllRefillPoint() {
-        foreach(GameObject point in pizzaRefillPoint)
+    public void DisableAllRefillPoint()
+    {
+        foreach (GameObject point in pizzaRefillPoint)
         {
             point.SetActive(false);
         }
@@ -53,7 +56,7 @@ public class PizzaManager : MonoBehaviour
 
     public void EnableAllRefillPoint()
     {
-        foreach(GameObject point in pizzaRefillPoint)
+        foreach (GameObject point in pizzaRefillPoint)
         {
             point.SetActive(true);
         }
@@ -61,14 +64,18 @@ public class PizzaManager : MonoBehaviour
 
     public void SpawnDeliveryPoint()
     {
-        int pos = Random.Range(0, pizzaDeliverSpawnPoints.Length);
-        Instantiate(pizzaDeliveryObject, pizzaDeliverSpawnPoints[pos].position, Quaternion.identity);
+        if (pizzaAmount > 0)
+        {
+            int pos = Random.Range(0, pizzaDeliverSpawnPoints.Length);
+            Instantiate(pizzaDeliveryObject, pizzaDeliverSpawnPoints[pos].position, Quaternion.identity);
+            compass.SetTarget(pizzaDeliverSpawnPoints[pos]);
+        }
     }
-    
+
     public void ResetDelivery()
     {
         DeliverPizza[] deliverPoints = FindObjectsOfType<DeliverPizza>();
-        foreach(DeliverPizza deliveryPoint in deliverPoints)
+        foreach (DeliverPizza deliveryPoint in deliverPoints)
         {
             Destroy(deliveryPoint.gameObject);
         }

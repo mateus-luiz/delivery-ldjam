@@ -44,6 +44,15 @@ public partial class @MotorcycleActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PauseGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""82b9beaa-a681-4ae4-8c09-4cb8ac913de4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @MotorcycleActions: IInputActionCollection2, IDisposable
                     ""action"": ""Direction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea9b007a-0b39-4da7-a678-3577194be93d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @MotorcycleActions: IInputActionCollection2, IDisposable
         m_MotorcycleInputs = asset.FindActionMap("MotorcycleInputs", throwIfNotFound: true);
         m_MotorcycleInputs_Brake = m_MotorcycleInputs.FindAction("Brake", throwIfNotFound: true);
         m_MotorcycleInputs_Direction = m_MotorcycleInputs.FindAction("Direction", throwIfNotFound: true);
+        m_MotorcycleInputs_PauseGame = m_MotorcycleInputs.FindAction("PauseGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,12 +206,14 @@ public partial class @MotorcycleActions: IInputActionCollection2, IDisposable
     private List<IMotorcycleInputsActions> m_MotorcycleInputsActionsCallbackInterfaces = new List<IMotorcycleInputsActions>();
     private readonly InputAction m_MotorcycleInputs_Brake;
     private readonly InputAction m_MotorcycleInputs_Direction;
+    private readonly InputAction m_MotorcycleInputs_PauseGame;
     public struct MotorcycleInputsActions
     {
         private @MotorcycleActions m_Wrapper;
         public MotorcycleInputsActions(@MotorcycleActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Brake => m_Wrapper.m_MotorcycleInputs_Brake;
         public InputAction @Direction => m_Wrapper.m_MotorcycleInputs_Direction;
+        public InputAction @PauseGame => m_Wrapper.m_MotorcycleInputs_PauseGame;
         public InputActionMap Get() { return m_Wrapper.m_MotorcycleInputs; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -206,6 +229,9 @@ public partial class @MotorcycleActions: IInputActionCollection2, IDisposable
             @Direction.started += instance.OnDirection;
             @Direction.performed += instance.OnDirection;
             @Direction.canceled += instance.OnDirection;
+            @PauseGame.started += instance.OnPauseGame;
+            @PauseGame.performed += instance.OnPauseGame;
+            @PauseGame.canceled += instance.OnPauseGame;
         }
 
         private void UnregisterCallbacks(IMotorcycleInputsActions instance)
@@ -216,6 +242,9 @@ public partial class @MotorcycleActions: IInputActionCollection2, IDisposable
             @Direction.started -= instance.OnDirection;
             @Direction.performed -= instance.OnDirection;
             @Direction.canceled -= instance.OnDirection;
+            @PauseGame.started -= instance.OnPauseGame;
+            @PauseGame.performed -= instance.OnPauseGame;
+            @PauseGame.canceled -= instance.OnPauseGame;
         }
 
         public void RemoveCallbacks(IMotorcycleInputsActions instance)
@@ -237,5 +266,6 @@ public partial class @MotorcycleActions: IInputActionCollection2, IDisposable
     {
         void OnBrake(InputAction.CallbackContext context);
         void OnDirection(InputAction.CallbackContext context);
+        void OnPauseGame(InputAction.CallbackContext context);
     }
 }

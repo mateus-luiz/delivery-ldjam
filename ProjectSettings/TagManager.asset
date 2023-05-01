@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Motorcycle
+  - timer_txt
+  - score_txt
+  - audio_source_delivery
   layers:
   - Default
   - TransparentFX

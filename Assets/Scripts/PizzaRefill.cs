@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PizzaRefill : MonoBehaviour
 {
-    [Header("Pizza Settings")]
+    [Header("Pizzeria Settings")]
     private PizzaManager pizzaManager;
     public int minPizza;
     public int maxPizza;
+    [SerializeField] private AudioSource audioSource;
 
     [Header("Timer Settings")]
     private Timer timer;
@@ -26,6 +27,8 @@ public class PizzaRefill : MonoBehaviour
         pizzaManager.SpawnDeliveryPoint();
 
         timer.PauseTimer(false);
+
+        audioSource.Play();
         pizzaManager.DisableAllRefillPoint();
     }
 
